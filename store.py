@@ -17,12 +17,12 @@ class Store:
 
 
     @classmethod
-    def franchise(cls, store):
+    def franchise(cls, store: "Store") -> "Store":
         return cls(store.name + ' - franchise')
 
 
     @staticmethod
-    def store_details(store):
+    def store_details(store: "Store") -> str:
         return f"{store.name}, total stock price: {store.stock_price()}"
 
 if __name__ == "__main__":
