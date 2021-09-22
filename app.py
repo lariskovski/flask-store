@@ -26,7 +26,7 @@ class Item(Resource):
             return {'message': f'Item {name} not found'}, 404
 
     def post(self, name):
-        # Makes sure there is no duplicate items
+        # Makes sure there are no duplicate items
         if [i for i in items if i['name'] == name]:
             return {'message': f'Item with name {name} already exists'}, 400
 
