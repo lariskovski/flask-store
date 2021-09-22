@@ -40,6 +40,21 @@ class Item(Resource):
         items = [i for i in items if i['name'] != name]
         return {'message': 'Item deleted'}, 200
 
+    def put(self, name):
+        data = request.get_json()
+        try:
+            # If item exists, it's updated
+            item = [i for i in items if i['name'] == name][0]
+            items.update(data)
+        except IndexError:
+            # If item does not exist, it's created
+            item = {'name': name, 'price': data['price']}
+            items.append(item)
+        finally:
+            return item, 200
+
+
+
 
 class ItemList(Resource):
     def get(self):
