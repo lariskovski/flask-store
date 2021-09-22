@@ -19,15 +19,15 @@ class Item(Resource):
 
     @jwt_required()
     def get(self, name):
-        # The filter method acts like a list comprehention
-        # The next method gets the first element from the filter list
-        # The second parameter on next is what is returned if there are no elements
-        item = next(filter(lambda x: x['name'] == name, items), None)
-        return {'item': item}, 200 if item else 404
+        try:
+            item = [i for i in items if i['name'] == name][0]
+            return {'item': item}, 200
+        except IndexError:
+            return {'message': f'Item {name} not found'}, 404
 
     def post(self, name):
-        # makes sure there is no duplicate items
-        if next(filter(lambda x: x['name'] == name, items), None) is not None:
+        # Makes sure there is no duplicate items
+        if [i for i in items if i['name'] == name]:
             return {'message': f'Item with name {name} already exists'}, 400
 
         data = request.get_json()
