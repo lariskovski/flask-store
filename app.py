@@ -1,14 +1,23 @@
+from security import authenticate, identity
 from flask import Flask, request
 from flask_restful import Resource, Api
+from flask_jwt import JWT, jwt_required
+
+from security import authenticate, identity
 
 app = Flask(__name__)
-
+app.secret_key = 'onetwothree'
 api = Api(app)
+
+# Creates /auth
+# Returns access token
+jwt = JWT(app, authenticate, identity)
 
 items = []
 
 class Item(Resource):
 
+    @jwt_required()
     def get(self, name):
         # The filter method acts like a list comprehention
         # The next method gets the first element from the filter list
