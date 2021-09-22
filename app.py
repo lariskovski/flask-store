@@ -1,6 +1,6 @@
 from security import authenticate, identity
 from flask import Flask, request
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, reqparse
 from flask_jwt import JWT, jwt_required
 
 from security import authenticate, identity
@@ -41,7 +41,16 @@ class Item(Resource):
         return {'message': 'Item deleted'}, 200
 
     def put(self, name):
-        data = request.get_json()
+        parser = reqparse.RequestParser()
+        parser.add_argument(
+                'price',
+                type=float,
+                required=True,
+                help="This filed cannot be left blank"
+        )
+
+        data = parser.parse_args()
+
         try:
             # If item exists, it's updated
             item = [i for i in items if i['name'] == name][0]
