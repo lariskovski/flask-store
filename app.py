@@ -35,6 +35,11 @@ class Item(Resource):
         items.append(item)
         return item, 201
 
+    def delete(self, name):
+        global items
+        items = [i for i in items if i['name'] != name]
+        return {'message': 'Item deleted'}, 200
+
 
 class ItemList(Resource):
     def get(self):
