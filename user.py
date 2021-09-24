@@ -1,5 +1,6 @@
 import sqlite3
-
+from flask_restful import Resource
+from flask import request
 
 class User:
     def __init__(self, _id, username, password) -> None:
@@ -40,3 +41,20 @@ class User:
         
         connection.close()
         return user
+
+
+class UserRegister(Resource):
+    
+    def post(self):
+        data = request.get_json()
+        # Create connection
+        conn = sqlite3.connect('data.db')
+        cursor = conn.cursor()
+        
+        insert_query = "INSERT INTO users VALUES (?,?,?)"
+
+        cursor.execute(insert_query, (data['username'], data['password']))
+
+        # Commit and close connection
+        conn.commit()
+        conn.close()
