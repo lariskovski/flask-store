@@ -79,17 +79,22 @@ class Item(Resource):
     def put(self, name):
 
         data = Item.parser.parse_args()
+        item = {'name': name, 'price': data['price']}
 
-        try:
-            # If item exists, it's updated
-            item = [i for i in items if i['name'] == name][0]
-            items.update(data)
-        except IndexError:
-            # If item does not exist, it's created
-            item = {'name': name, 'price': data['price']}
-            items.append(item)
-        finally:
+        if Item.find_by_name(name):
+            conn = sqlite3.connect('data.db')
+            cursor = conn.cursor()
+            
+            query = "UPDATE items SET price=? WHERE name=?"
+            cursor.execute(query, (item['price'], item['name']))
+
+            conn.commit()
+            conn.close()
             return item, 200
+        
+        else:
+            Item.create_item(item['name'], item['price'])
+            return item, 201
 
 
 class ItemList(Resource):
