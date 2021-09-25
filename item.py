@@ -37,11 +37,11 @@ class Item(Resource):
         return None
 
     @classmethod
-    def create_item(cls, name, price):
+    def insert(cls, item):
         conn = sqlite3.connect('data.db')
         cursor = conn.cursor()
         insert_query = "INSERT INTO items VALUES (?,?)"
-        cursor.execute(insert_query, (name, price))
+        cursor.execute(insert_query, (item['name'], item['price']))
         conn.commit()
         conn.close()
 
@@ -53,7 +53,7 @@ class Item(Resource):
 
         data = Item.parser.parse_args()
         item = {'name': name, 'price': data['price']}
-        Item.create_item(item['name'], item['price'])
+        Item.insert(item)
 
         return {'item': item}, 201
 
@@ -93,7 +93,7 @@ class Item(Resource):
             return item, 200
         
         else:
-            Item.create_item(item['name'], item['price'])
+            Item.insert(item)
             return item, 201
 
 
