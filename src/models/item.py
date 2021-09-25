@@ -11,12 +11,11 @@ class ItemModel:
         return {'name': self.name, 'price': self.price}
 
 
-    @classmethod
-    def insert(cls, item):
+    def insert(self):
         conn = sqlite3.connect('data.db')
         cursor = conn.cursor()
         insert_query = "INSERT INTO items VALUES (?,?)"
-        cursor.execute(insert_query, (item['name'], item['price']))
+        cursor.execute(insert_query, (self.name, self.price))
         conn.commit()
         conn.close()
 
@@ -34,5 +33,28 @@ class ItemModel:
         conn.close()
 
         if row:
-            return {'item': {'name': row[0], 'price': row[1]}}, 200
+            return cls(*row)
         return None
+
+
+    def update(self):
+        conn = sqlite3.connect('data.db')
+        cursor = conn.cursor()
+        
+        query = "UPDATE items SET price=? WHERE name=?"
+        cursor.execute(query, (self.price, self.price))
+
+        conn.commit()
+        conn.close()
+    
+
+    def delete(self):
+        conn = sqlite3.connect('data.db')
+        cursor = conn.cursor()
+        
+        query = "DELETE FROM items WHERE name=?"
+
+        cursor.execute(query, (self.name,))
+
+        conn.commit()
+        conn.close()
