@@ -36,6 +36,15 @@ class Item(Resource):
             return {'item': {'name': row[0], 'price': row[1]}}, 200
         return None
 
+    @classmethod
+    def create_item(cls, name, price):
+        conn = sqlite3.connect('data.db')
+        cursor = conn.cursor()
+        insert_query = "INSERT INTO items VALUES (?,?)"
+        cursor.execute(insert_query, (name, price))
+        conn.commit()
+        conn.close()
+
 
     def post(self, name):
         # Makes sure there are no duplicate items
@@ -43,18 +52,10 @@ class Item(Resource):
             return {"message": f"Item {name} already exists"}, 400
 
         data = Item.parser.parse_args()
-        
-        conn = sqlite3.connect('data.db')
-        cursor = conn.cursor()
-        
-        insert_query = "INSERT INTO items VALUES (?,?)"
+        item = {'name': name, 'price': data['price']}
+        Item.create_item(item['name'], item['price'])
 
-        cursor.execute(insert_query, (name, data['price']))
-
-        conn.commit()
-        conn.close()
-
-        return {'item': {'name': name, 'price': data['price']}}, 201
+        return {'item': item}, 201
 
 
     def delete(self, name):
