@@ -56,10 +56,24 @@ class Item(Resource):
 
         return {'item': {'name': name, 'price': data['price']}}, 201
 
+
     def delete(self, name):
-        global items
-        items = [i for i in items if i['name'] != name]
+        
+        if not Item.find_by_name(name):
+            return {"message": f"Item {name} does not exists"}, 400
+
+        conn = sqlite3.connect('data.db')
+        cursor = conn.cursor()
+        
+        query = "DELETE FROM items WHERE name=?"
+
+        cursor.execute(query, (name,))
+
+        conn.commit()
+        conn.close()
+
         return {'message': 'Item deleted'}, 200
+
 
     def put(self, name):
 
