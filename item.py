@@ -15,7 +15,13 @@ class Item(Resource):
 
     @jwt_required()
     def get(self, name):
-        
+        item = self.find_by_name(name)
+        if item:
+            return item
+        return {'message': 'item not found'}, 404
+
+    @classmethod
+    def find_by_name(cls, name):
         conn = sqlite3.connect('data.db')
         cursor = conn.cursor()
         
@@ -28,14 +34,13 @@ class Item(Resource):
 
         if row:
             return {'item': {'name': row[0], 'price': row[1]}}, 200
-
-        return {'message': 'item not found'}, 404
+        return None
 
 
     def post(self, name):
         # Makes sure there are no duplicate items
-        # if Item.get(self, name):
-        #     return {"message": f"Item {name} already exists"}, 400
+        if Item.find_by_name(name):
+            return {"message": f"Item {name} already exists"}, 400
 
         data = Item.parser.parse_args()
         
