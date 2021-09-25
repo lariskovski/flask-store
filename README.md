@@ -9,7 +9,6 @@
 ## Running Locally
 
 ~~~~
-make setup
 source bin/activate
-python app.py
+make run
 ~~~~

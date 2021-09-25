@@ -5,6 +5,7 @@ all: run
 	@echo "All good."
 
 setup:
+	pip install pip --upgrade
 	pip install -r requirements.txt
 	python src/create_tables.py
 
