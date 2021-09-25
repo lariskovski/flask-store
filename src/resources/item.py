@@ -25,7 +25,7 @@ class Item(Resource):
 
         # Makes sure there are no duplicate items
         if ItemModel.find_by_name(name):
-            return {"message": f"Item {name} already exists"}, 400
+            return {"message": f"Item {name} already exists"}, 422
 
         data = Item.parser.parse_args()
         item = ItemModel(name, data['price'])
