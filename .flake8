@@ -1,0 +1,12 @@
+[flake8]
+ignore = D203
+exclude =
+    .git/**,
+    __pycache__/**,
+    ./bin/**,
+    ./lib/**,
+    ./lib64/**,
+    ./include/**,
+    ./share/**
+max-complexity = 10
+max-line-length = 120

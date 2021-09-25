@@ -6,5 +6,13 @@
         "**/share": true
     },
 
-    "python.pythonPath": "${workspaceFolder}/code/venv/bin/python"
+    "python.defaultInterpreterPath": "${workspaceFolder}/bin/python",
+      
+      "python.linting.pylintEnabled": false,
+      "python.linting.flake8Enabled": true,
+      "python.linting.flake8Path": "${workspaceFolder}/bin/flake8",
+      "python.linting.flake8Args": [
+        "--config=.flake8"
+    ],
+    
 }

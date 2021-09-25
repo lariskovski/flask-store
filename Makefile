@@ -14,5 +14,8 @@ run: clean setup
 test:
 	echo test
 
+lint:
+	flake8
+
 clean:
 	rm data.db
