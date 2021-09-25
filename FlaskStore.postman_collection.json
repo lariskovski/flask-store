@@ -1,0 +1,261 @@
+{
+	"info": {
+		"_postman_id": "649ecb27-281a-4a11-9b61-b3fd0b59783c",
+		"name": "FlaskStore",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"12345\"\r\n}"
+				},
+				"url": {
+					"raw": "{{hostname}}:{{port}}/register",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/auth",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"12345\"\r\n}"
+				},
+				"url": {
+					"raw": "{{hostname}}:{{port}}/auth",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/items",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{hostname}}:{{port}}/items",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/item/<name>",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "JWT {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"price\": 20.00\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{hostname}}:{{port}}/item/stamina-potion",
+					"protocol": "http",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"item",
+						"stamina-potion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/item/<name>",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{hostname}}:{{port}}/item/stamina-potion",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"item",
+						"stamina-potion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/item/<name>",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{hostname}}:{{port}}/item/stamina-potion",
+					"protocol": "http",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"item",
+						"stamina-potion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/item/<name>",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"price\": 150.00\r\n}"
+				},
+				"url": {
+					"raw": "http://{{hostname}}:{{port}}/item/legendary-stamina-potion",
+					"protocol": "http",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"item",
+						"legendary-stamina-potion"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"var authServiceUrl = pm.environment.get('hostname');",
+					"var port = pm.environment.get('port');",
+					"var username = pm.environment.get('auth_name');",
+					"var password = pm.environment.get('auth_password');",
+					"",
+					"",
+					"const createUser = {       ",
+					"    url: authServiceUrl+':'+ port + '/register',",
+					"    method: 'POST',",
+					"    header: 'Content-Type:application/json',",
+					"    body: {",
+					"            mode: 'raw',",
+					"            raw: JSON.stringify({ \"username\": username, \"password\": password})",
+					"    }",
+					"};",
+					"",
+					"",
+					"pm.sendRequest(createUser, (err, response) => {",
+					"   console.log(\"User created if not exists\");",
+					"});",
+					"",
+					"const getTokenRequest = {       ",
+					"    url: authServiceUrl+':'+ port + '/auth',",
+					"    method: 'POST',",
+					"    header: 'Content-Type:application/json',",
+					"    body: {",
+					"            mode: 'raw',",
+					"            raw: JSON.stringify({ \"username\": username, \"password\": password})",
+					"    }",
+					"};",
+					"",
+					"",
+					"pm.sendRequest(getTokenRequest, (err, response) => {",
+					"  const jsonData = response.json();",
+					"//   console.log(jsonData);",
+					"  const newAccessToken = jsonData['access_token'];",
+					"//   console.log(newAccessToken);",
+					"",
+					"  pm.variables.set('token', newAccessToken);",
+					"});",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
