@@ -53,7 +53,11 @@ class Item(Resource):
 
         data = Item.parser.parse_args()
         item = {'name': name, 'price': data['price']}
-        Item.insert(item)
+
+        try:
+            Item.insert(item)
+        except:
+            return {"message": "An error occurred inserting the item"}, 500
 
         return {'item': item}, 201
 
