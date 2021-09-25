@@ -7,6 +7,19 @@
 	"item": [
 		{
 			"name": "/register",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -21,11 +34,10 @@
 					"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"12345\"\r\n}"
 				},
 				"url": {
-					"raw": "{{hostname}}:{{port}}/register",
+					"raw": "{{url}}/register",
 					"host": [
-						"{{hostname}}"
+						"{{url}}"
 					],
-					"port": "{{port}}",
 					"path": [
 						"register"
 					]
@@ -35,6 +47,22 @@
 		},
 		{
 			"name": "/auth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"tests[\"Access Token is set\"] = jsonData.access_token != undefined;\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -49,11 +77,10 @@
 					"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"12345\"\r\n}"
 				},
 				"url": {
-					"raw": "{{hostname}}:{{port}}/auth",
+					"raw": "{{url}}/auth",
 					"host": [
-						"{{hostname}}"
+						"{{url}}"
 					],
-					"port": "{{port}}",
 					"path": [
 						"auth"
 					]
@@ -63,15 +90,27 @@
 		},
 		{
 			"name": "/items",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{hostname}}:{{port}}/items",
+					"raw": "{{url}}/items",
 					"host": [
-						"{{hostname}}"
+						"{{url}}"
 					],
-					"port": "{{port}}",
 					"path": [
 						"items"
 					]
@@ -81,6 +120,30 @@
 		},
 		{
 			"name": "/item/<name>",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Price is returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.price).to.eql(20.0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -105,12 +168,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://{{hostname}}:{{port}}/item/stamina-potion",
-					"protocol": "http",
+					"raw": "{{url}}/item/stamina-potion",
 					"host": [
-						"{{hostname}}"
+						"{{url}}"
 					],
-					"port": "{{port}}",
 					"path": [
 						"item",
 						"stamina-potion"
@@ -121,6 +182,19 @@
 		},
 		{
 			"name": "/item/<name>",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -134,11 +208,10 @@
 					}
 				],
 				"url": {
-					"raw": "{{hostname}}:{{port}}/item/stamina-potion",
+					"raw": "{{url}}/item/stamina-potion",
 					"host": [
-						"{{hostname}}"
+						"{{url}}"
 					],
-					"port": "{{port}}",
 					"path": [
 						"item",
 						"stamina-potion"
@@ -149,16 +222,27 @@
 		},
 		{
 			"name": "/item/<name>",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://{{hostname}}:{{port}}/item/stamina-potion",
-					"protocol": "http",
+					"raw": "{{url}}/item/stamina-potion",
 					"host": [
-						"{{hostname}}"
+						"{{url}}"
 					],
-					"port": "{{port}}",
 					"path": [
 						"item",
 						"stamina-potion"
@@ -169,6 +253,19 @@
 		},
 		{
 			"name": "/item/<name>",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -183,12 +280,10 @@
 					"raw": "{\r\n    \"price\": 150.00\r\n}"
 				},
 				"url": {
-					"raw": "http://{{hostname}}:{{port}}/item/legendary-stamina-potion",
-					"protocol": "http",
+					"raw": "{{url}}/item/legendary-stamina-potion",
 					"host": [
-						"{{hostname}}"
+						"{{url}}"
 					],
-					"port": "{{port}}",
 					"path": [
 						"item",
 						"legendary-stamina-potion"
@@ -204,14 +299,13 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
-					"var authServiceUrl = pm.environment.get('hostname');",
-					"var port = pm.environment.get('port');",
+					"var url = pm.environment.get('url');",
 					"var username = pm.environment.get('auth_name');",
 					"var password = pm.environment.get('auth_password');",
 					"",
 					"",
 					"const createUser = {       ",
-					"    url: authServiceUrl+':'+ port + '/register',",
+					"    url: url + '/register',",
 					"    method: 'POST',",
 					"    header: 'Content-Type:application/json',",
 					"    body: {",
@@ -226,7 +320,7 @@
 					"});",
 					"",
 					"const getTokenRequest = {       ",
-					"    url: authServiceUrl+':'+ port + '/auth',",
+					"    url: url + '/auth',",
 					"    method: 'POST',",
 					"    header: 'Content-Type:application/json',",
 					"    body: {",
@@ -237,12 +331,12 @@
 					"",
 					"",
 					"pm.sendRequest(getTokenRequest, (err, response) => {",
-					"  const jsonData = response.json();",
-					"//   console.log(jsonData);",
-					"  const newAccessToken = jsonData['access_token'];",
-					"//   console.log(newAccessToken);",
+					"    const jsonData = response.json();",
+					"    //   console.log(jsonData);",
+					"    const newAccessToken = jsonData['access_token'];",
+					"    //   console.log(newAccessToken);",
 					"",
-					"  pm.variables.set('token', newAccessToken);",
+					"    pm.variables.set('token', newAccessToken);",
 					"});",
 					""
 				]

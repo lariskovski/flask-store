@@ -5,10 +5,18 @@ all: run
 	@echo "All good."
 
 setup:
-	python3.8 -m venv .
-	source bin/activate
+	pip install pip --upgrade
 	pip install -r requirements.txt
-	python create_tables.py
+	python src/create_tables.py
+
+run: clean setup
+	python src/app.py
 
 test:
 	echo test
+
+lint:
+	flake8
+
+clean:
+	rm data.db
