@@ -1,0 +1,10 @@
+{
+    "files.exclude": {
+        "**/include": true,
+        "**/lib": true,
+        "**/lib64": true,
+        "**/share": true
+    },
+
+    "python.pythonPath": "${workspaceFolder}/code/venv/bin/python"
+}
