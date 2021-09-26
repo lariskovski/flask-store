@@ -1,11 +1,12 @@
-from security import authenticate, identity
 from flask_restful import Api
 from flask_jwt import JWT
 from flask import Flask
 
-# from security import authenticate, identity
+from security import authenticate, identity
 from resources.item import Item, ItemList
 from resources.user import UserRegister
+
+from db import db
 
 from gevent.pywsgi import WSGIServer
 from gevent import monkey
@@ -13,9 +14,12 @@ from gevent import monkey
 monkey.patch_all()
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'onetwothree'
-api = Api(app)
+db.init_app(app)
 
+api = Api(app)
 # Creates /auth
 # Returns access token
 jwt = JWT(app, authenticate, identity)

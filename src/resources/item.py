@@ -30,7 +30,7 @@ class Item(Resource):
         item = ItemModel(name, data['price'])
 
         try:
-            item.insert()
+            item.save_to_db()
         except Exception as e:
             print(e)
             return {"message": "An error occurred inserting the item"}, 500
@@ -43,20 +43,20 @@ class Item(Resource):
         if not item:
             return {"message": f"Item {name} does not exists"}, 400
 
-        item.delete()
+        item.delete_from_db()
         return {'message': 'Item deleted'}, 200
 
     def put(self, name):
         data = Item.parser.parse_args()
         item = ItemModel.find_by_name(name)
 
-        if item:
-            item.update()
-            return item.json(), 200
-        else:
+        if not item:
             item = ItemModel(name, data['price'])
-            item.insert()
-            return item.json(), 201
+        else:
+            item.price = data['price']
+
+        item.save_to_db()
+        return item.json(), 200
 
 
 class ItemList(Resource):
