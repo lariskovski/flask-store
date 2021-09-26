@@ -11,10 +11,17 @@ class ItemModel(db.Model):
         self.name = name
         self.price = price
 
+    def __str__(self) -> str:
+        return {"name": self.name, "price": self.price}
+
     @classmethod
     def find_by_name(cls, name):
         # SELECT * FROM items WHERE name=name LIMIT 1
         return cls.query.filter_by(name=name).first()
+
+    @classmethod
+    def get_all(cls):
+        return cls.query.all()
 
     def save_to_db(self):
         db.session.add(self)
