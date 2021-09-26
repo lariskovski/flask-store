@@ -24,9 +24,9 @@ class UserRegister(Resource):
 
         # Makes sure usernames are unique
         if UserModel.find_by_username(data['username']):
-            return {"message": f"User {data['username']} already exists"}, 400
+            return {"message": "User already exists"}, 400
 
-        user = UserModel(None, data['username'], data['password'])
-        user.insert()
+        user = UserModel(**data)
+        user.save_to_db()
 
-        return {"message": "User created successfully."}, 201
+        return {"message": "User created successfully"}, 201
