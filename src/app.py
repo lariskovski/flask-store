@@ -34,7 +34,7 @@ jwt = JWT(app, authenticate, identity)
 
 
 api.add_resource(Item, '/item/<string:name>')
-api.add_resource(Order, '/order/<string:_id>')
+api.add_resource(Order, '/order', '/order/<string:_id>')
 api.add_resource(UserRegister, '/register')
 api.add_resource(OrderList, '/orders')
 api.add_resource(ItemList, '/items')
