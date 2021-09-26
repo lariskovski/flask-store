@@ -11,14 +11,19 @@ order_item = db.Table(
 class OrderModel(db.Model):
     __tablename__ = "orders"
     id = db.Column(db.Integer, primary_key=True)
+    # Many to Many
     items = db.relationship(
         'ItemModel',
         secondary=order_item,
         backref=db.backref('orders'),
         lazy='dynamic')
 
-    # def __init__(self) -> None:
-    #     pass
+    # One to Many
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('UserModel')
+
+    def __init__(self, user_id) -> None:
+        self.user_id = user_id
 
     @classmethod
     def find_by_id(cls, _id):
@@ -33,4 +38,4 @@ class OrderModel(db.Model):
         db.session.commit()
 
     def json(self):
-        return {'id': self.id, "items": [item.name for item in self.items]}
+        return {'id': self.id, "user_id": self.user_id, "items": [item.name for item in self.items]}

@@ -7,6 +7,8 @@ class UserModel(db.Model):
     username = db.Column(db.String(80))
     password = db.Column(db.String(80))
 
+    orders = db.relationship('OrderModel', lazy='dynamic')
+
     def __init__(self, username, password) -> None:
         self.username = username
         self.password = password

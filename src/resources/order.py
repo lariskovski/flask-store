@@ -3,6 +3,7 @@ from flask_restful import Resource, reqparse, request
 
 from models.order import OrderModel
 from models.item import ItemModel
+# from models.user import UserModel
 
 
 class Order(Resource):
@@ -21,7 +22,7 @@ class Order(Resource):
         data = request.json
         print(data)
 
-        order = OrderModel()
+        order = OrderModel(1)
         items = data['items']
         for item in items:
             try:
@@ -31,7 +32,7 @@ class Order(Resource):
                 print(e)
                 return {"message": "An error occurred inserting the order"}, 500
 
-        return {"id": order.id, "items": [item.name for item in order.items]}, 201
+        return {"id": order.id, "user_id": order.user_id, "items": [item.name for item in order.items]}, 201
 
 
 class OrderList(Resource):
