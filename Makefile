@@ -13,3 +13,6 @@ test:
 
 lint:
 	flake8
+
+clean:
+	rm src/data.db
