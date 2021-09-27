@@ -1,4 +1,4 @@
-from flask_jwt import jwt_required
+from flask_jwt_extended import jwt_required
 from flask_restful import Resource, reqparse, request
 
 from models.order import OrderModel
@@ -17,6 +17,7 @@ class Order(Resource):
             return {"items": [item.name for item in order.items]}
         return {'message': 'order not found'}, 404
 
+    @jwt_required()
     def post(self):
 
         data = request.json
