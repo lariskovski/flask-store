@@ -1,4 +1,4 @@
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource, reqparse, request
 
 from models.order import OrderModel
@@ -14,16 +14,17 @@ class Order(Resource):
     def get(self, _id):
         order = OrderModel.find_by_id(_id)
         if order:
-            return {"items": [item.name for item in order.items]}
+            return {"user_id": order.user_id, "items": [item.name for item in order.items]}
         return {'message': 'order not found'}, 404
 
     @jwt_required()
     def post(self):
 
         data = request.json
-        print(data)
 
-        order = OrderModel(1)
+        user_id = get_jwt_identity()
+
+        order = OrderModel(user_id)
         items = data['items']
         for item in items:
             try:
