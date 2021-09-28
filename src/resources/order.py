@@ -1,9 +1,10 @@
+from typing import List
+
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource, reqparse, request
 
 from models.order import OrderModel
 from models.item import ItemModel
-# from models.user import UserModel
 
 
 class Order(Resource):
@@ -25,19 +26,26 @@ class Order(Resource):
         user_id = get_jwt_identity()
 
         items = []
+        price: float = .0
 
-        items_names = data['items']
+        items_names: List[str] = data['items']
         for item in items_names:
             try:
                 item_object = ItemModel.find_by_name(item)
                 items.append(item_object)
+                price += item_object.price
             except Exception as e:
                 print(e)
                 return {"message": "An error occurred inserting the order"}, 500
 
-        order = OrderModel(items, user_id)
+        order = OrderModel(user_id, items, price)
         order.save_to_db()
-        return {"id": order.id, "user_id": order.user_id, "items": [item.name for item in order.items]}, 201
+        return {
+            "id": order.id,
+            "user_id": order.user_id,
+            "items": [item.name for item in order.items],
+            "pirce": price
+        }, 201
 
 
 class OrderList(Resource):

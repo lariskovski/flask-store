@@ -19,14 +19,16 @@ class OrderModel(db.Model):
         secondary=order_item,
         backref=db.backref('orders'),
         lazy='dynamic')
+    price = db.Column(db.Float)
 
     # One to Many
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('UserModel')
 
-    def __init__(self, items: List[ItemModel], user_id: UserModel.id) -> None:
-        self.items = items
+    def __init__(self, user_id: UserModel.id, items: List[ItemModel], price: ItemModel.price) -> None:
         self.user_id = user_id
+        self.items = items
+        self.price = price
 
     @classmethod
     def find_by_id(cls, _id):
@@ -41,4 +43,9 @@ class OrderModel(db.Model):
         db.session.commit()
 
     def json(self):
-        return {'id': self.id, "user_id": self.user_id, "items": [item.name for item in self.items]}
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'items': [item.name for item in self.items],
+            'price': self.price
+        }
