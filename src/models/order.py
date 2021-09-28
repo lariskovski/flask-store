@@ -1,5 +1,7 @@
-# from typing import List
+from typing import List
 from db import db
+from models.item import ItemModel
+from models.user import UserModel
 
 
 order_item = db.Table(
@@ -22,7 +24,8 @@ class OrderModel(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('UserModel')
 
-    def __init__(self, user_id) -> None:
+    def __init__(self, items: List[ItemModel], user_id: UserModel.id) -> None:
+        self.items = items
         self.user_id = user_id
 
     @classmethod
@@ -33,8 +36,8 @@ class OrderModel(db.Model):
     def get_all(cls):
         return cls.query.all()
 
-    def save_to_db(self, item):
-        self.items.append(item)
+    def save_to_db(self):
+        db.session.add(self)
         db.session.commit()
 
     def json(self):

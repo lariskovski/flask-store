@@ -24,16 +24,19 @@ class Order(Resource):
 
         user_id = get_jwt_identity()
 
-        order = OrderModel(user_id)
-        items = data['items']
-        for item in items:
+        items = []
+
+        items_names = data['items']
+        for item in items_names:
             try:
                 item_object = ItemModel.find_by_name(item)
-                order.save_to_db(item_object)
+                items.append(item_object)
             except Exception as e:
                 print(e)
                 return {"message": "An error occurred inserting the order"}, 500
 
+        order = OrderModel(items, user_id)
+        order.save_to_db()
         return {"id": order.id, "user_id": order.user_id, "items": [item.name for item in order.items]}, 201
 
 
