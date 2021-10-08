@@ -1,4 +1,4 @@
-from flask_jwt import jwt_required
+from flask_jwt_extended import jwt_required
 from flask_restful import Resource, reqparse
 
 from models.item import ItemModel
@@ -30,7 +30,7 @@ class Item(Resource):
         item = ItemModel(name, data['price'])
 
         try:
-            item.insert()
+            item.save_to_db()
         except Exception as e:
             print(e)
             return {"message": "An error occurred inserting the item"}, 500
@@ -43,34 +43,22 @@ class Item(Resource):
         if not item:
             return {"message": f"Item {name} does not exists"}, 400
 
-        item.delete()
+        item.delete_from_db()
         return {'message': 'Item deleted'}, 200
 
     def put(self, name):
         data = Item.parser.parse_args()
         item = ItemModel.find_by_name(name)
 
-        if item:
-            item.update()
-            return item.json(), 200
-        else:
+        if not item:
             item = ItemModel(name, data['price'])
-            item.insert()
-            return item.json(), 201
+        else:
+            item.price = data['price']
+
+        item.save_to_db()
+        return item.json(), 200
 
 
 class ItemList(Resource):
-
     def get(self):
-        import sqlite3
-        conn = sqlite3.connect('data.db')
-        cursor = conn.cursor()
-        query = "SELECT * FROM items"
-        result = cursor.execute(query)
-        items = []
-
-        for row in result:
-            items.append({"name": row[0], "price": row[1]})
-
-        conn.close()
-        return {'items': items}
+        return {"item": [item.json() for item in ItemModel.get_all()]}
